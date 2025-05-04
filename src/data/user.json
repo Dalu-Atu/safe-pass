@@ -1,0 +1,259 @@
+[
+  {
+    "email": "alex@example.com",
+    "type": "user",
+    "password": "password123",
+    "name": "Alex Bregoli",
+    "avatar": "AJ",
+    "totalBalance": 5825.42,
+    "spendingByPeriod": {
+      "Day": 125.36,
+      "Week": 432.89,
+      "Month": 1244.02,
+      "Year": 14568.75
+    },
+    "categories": [
+      {
+        "name": "Shopping",
+        "color": "#7C3AED",
+        "percentage": 15
+      },
+      {
+        "name": "Food",
+        "color": "#EF4444",
+        "percentage": 22
+      },
+      {
+        "name": "Entertainment",
+        "color": "#3B82F6",
+        "percentage": 8
+      },
+      {
+        "name": "Housing",
+        "color": "#F59E0B",
+        "percentage": 35
+      },
+      {
+        "name": "Others",
+        "color": "#10B981",
+        "percentage": 20
+      }
+    ],
+    "transactions": [
+      {
+        "id": 1,
+        "name": "Ben Wayne",
+        "description": "Thanks for the dinner!",
+        "amount": "128.00",
+        "time": "1:22PM",
+        "icon": "B",
+        "color": "bg-gray-300",
+        "isPositive": true,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 2,
+        "name": "Carhartt",
+        "description": "Dubai Mall",
+        "amount": "234.00",
+        "time": "12:45PM",
+        "icon": "C",
+        "color": "bg-purple-500",
+        "isPositive": false,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 3,
+        "name": "Subscription",
+        "description": "Netflix",
+        "amount": "18.00",
+        "time": "12:32PM",
+        "icon": "N",
+        "color": "bg-red-500",
+        "isPositive": false,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 4,
+        "name": "Damien Light",
+        "description": "You won!",
+        "amount": "20.00",
+        "time": "12:22PM",
+        "icon": "D",
+        "color": "bg-blue-400",
+        "isPositive": false,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 5,
+        "name": "Salary",
+        "description": "Monthly income",
+        "amount": "3500.00",
+        "time": "9:05AM",
+        "icon": "$",
+        "color": "bg-green-500",
+        "isPositive": true,
+        "date": "2025-04-28"
+      },
+      {
+        "id": 6,
+        "name": "Grocery Store",
+        "description": "Weekly shopping",
+        "amount": "87.32",
+        "time": "6:45PM",
+        "icon": "G",
+        "color": "bg-yellow-500",
+        "isPositive": false,
+        "date": "2025-04-28"
+      }
+    ],
+    "messages": [
+      {
+        "id": 1,
+        "sender": "agent",
+        "name": "Emma Thompson",
+        "text": "Hi there! Welcome to Our Support. How can I help you today?",
+        "time": "10:03 AM"
+      }
+    ]
+  },
+  {
+    "email": "sarah@example.com",
+    "password": "securepass",
+    "type": "user",
+    "name": "Sarah Williams",
+    "avatar": "SW",
+    "totalBalance": 7250.18,
+    "spendingByPeriod": {
+      "Day": 95.22,
+      "Week": 356.7,
+      "Month": 1125.45,
+      "Year": 12850.33
+    },
+    "categories": [
+      {
+        "name": "Shopping",
+        "color": "#7C3AED",
+        "percentage": 12
+      },
+      {
+        "name": "Food",
+        "color": "#EF4444",
+        "percentage": 28
+      },
+      {
+        "name": "Entertainment",
+        "color": "#3B82F6",
+        "percentage": 15
+      },
+      {
+        "name": "Housing",
+        "color": "#F59E0B",
+        "percentage": 30
+      },
+      {
+        "name": "Others",
+        "color": "#10B981",
+        "percentage": 15
+      }
+    ],
+    "transactions": [
+      {
+        "id": 1,
+        "name": "Jane Doe",
+        "description": "Dinner payment",
+        "amount": "85.50",
+        "time": "7:30PM",
+        "icon": "J",
+        "color": "bg-gray-300",
+        "isPositive": true,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 2,
+        "name": "Target",
+        "description": "Home supplies",
+        "amount": "124.35",
+        "time": "3:15PM",
+        "icon": "T",
+        "color": "bg-red-500",
+        "isPositive": false,
+        "date": "2025-04-29"
+      }
+    ],
+    "messages": [
+      {
+        "id": 1,
+        "sender": "agent",
+        "name": "Emma Thompson",
+        "text": "Hi there! Welcome to Our Support. How can I help you today?",
+        "time": "10:03 AM"
+      }
+    ]
+  },
+  {
+    "email": "admin@gmail.com",
+    "password": "securepass",
+    "type": "admin",
+    "name": "Admin",
+    "avatar": "AD",
+    "totalBalance": 7250.18,
+    "spendingByPeriod": {
+      "Day": 95.22,
+      "Week": 356.7,
+      "Month": 1125.45,
+      "Year": 12850.33
+    },
+    "categories": [
+      {
+        "name": "Shopping",
+        "color": "#7C3AED",
+        "percentage": 12
+      },
+      {
+        "name": "Food",
+        "color": "#EF4444",
+        "percentage": 28
+      },
+      {
+        "name": "Entertainment",
+        "color": "#3B82F6",
+        "percentage": 15
+      },
+      {
+        "name": "Housing",
+        "color": "#F59E0B",
+        "percentage": 30
+      },
+      {
+        "name": "Others",
+        "color": "#10B981",
+        "percentage": 15
+      }
+    ],
+    "transactions": [
+      {
+        "id": 1,
+        "name": "Jane Doe",
+        "description": "Dinner payment",
+        "amount": "85.50",
+        "time": "7:30PM",
+        "icon": "J",
+        "color": "bg-gray-300",
+        "isPositive": true,
+        "date": "2025-04-29"
+      },
+      {
+        "id": 2,
+        "name": "Target",
+        "description": "Home supplies",
+        "amount": "124.35",
+        "time": "3:15PM",
+        "icon": "T",
+        "color": "bg-red-500",
+        "isPositive": false,
+        "date": "2025-04-29"
+      }
+    ]
+  }
+]
