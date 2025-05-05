@@ -65,21 +65,21 @@ export default function Report() {
   };
 
   return (
-    <div className="">
+    <div className="bg-gray-900 min-h-screen text-gray-100">
       {/* Navigation header */}
-      <div className="px-4 py-3 flex justify-between items-center">
+      <div className="px-4 py-3 flex justify-between items-center bg-gray-800">
         <Link to={-1} className="flex items-center">
-          <ArrowLeft size={20} className="mr-2 text-gray-700" />
-          <span className="font-medium text-gray-900">Home</span>
+          <ArrowLeft size={20} className="mr-2 text-gray-300" />
+          <span className="font-medium text-gray-100">Home</span>
         </Link>
-        <button className="flex items-center bg-gray-100 px-2 py-1 rounded-lg">
-          <Calendar size={16} className="mr-1 text-gray-600" />
-          <span className="text-sm text-gray-700">{currentMonthYear}</span>
+        <button className="flex items-center bg-gray-700 px-2 py-1 rounded-lg">
+          <Calendar size={16} className="mr-1 text-gray-300" />
+          <span className="text-sm text-gray-300">{currentMonthYear}</span>
         </button>
       </div>
 
       {/* Spending circle chart */}
-      <div className="px-4 py-6 flex flex-col items-center justify-center bg-gray-50">
+      <div className="px-4 py-6 flex flex-col items-center justify-center bg-gray-800">
         <div className="relative w-48 h-48 flex items-center justify-center mb-4">
           {/* Circle segments */}
           <svg className="absolute w-full h-full" viewBox="0 0 100 100">
@@ -112,24 +112,24 @@ export default function Report() {
 
           {/* Center text */}
           <div className="z-10 text-center">
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               Spent this {selectedPeriod.toLowerCase()}
             </div>
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-2xl font-bold text-gray-100">
               ${spentAmount.toFixed(2)}
             </div>
           </div>
         </div>
 
         {/* Time period selector */}
-        <div className="bg-white rounded-full px-1 py-1 flex space-x-1 shadow">
+        <div className="bg-gray-700 rounded-full px-1 py-1 flex space-x-1 shadow">
           {periods.map((period) => (
             <button
               key={period}
               className={`px-4 py-1 rounded-full text-sm ${
                 selectedPeriod === period
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-600"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-700 text-gray-300"
               }`}
               onClick={() => setSelectedPeriod(period)}
             >
@@ -141,9 +141,9 @@ export default function Report() {
 
       {/* Transactions list */}
       <div className="flex-1 px-4 mt-2 overflow-y-auto pb-5">
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="bg-gray-800 rounded-2xl p-4 shadow-md">
           <div className="mb-4">
-            <h2 className="font-medium text-gray-900">Transactions</h2>
+            <h2 className="font-medium text-gray-100">Transactions</h2>
           </div>
 
           {Object.keys(groupedTransactions)
@@ -151,7 +151,7 @@ export default function Report() {
             .reverse()
             .map((date) => (
               <div key={date}>
-                <div className="text-xs text-gray-500 mb-2 mt-4">
+                <div className="text-xs text-gray-400 mb-2 mt-4">
                   {getDateLabel(date)}
                 </div>
 
@@ -168,10 +168,10 @@ export default function Report() {
                           <span className="text-white">{transaction.icon}</span>
                         </div>
                         <div>
-                          <div className="font-medium text-gray-800">
+                          <div className="font-medium text-gray-200">
                             {transaction.name}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-gray-400">
                             {transaction.description}
                           </div>
                         </div>
@@ -180,14 +180,14 @@ export default function Report() {
                         <div
                           className={
                             transaction.isPositive
-                              ? "text-green-500"
-                              : "text-gray-800"
+                              ? "text-green-400"
+                              : "text-gray-200"
                           }
                         >
                           {transaction.isPositive ? "+" : "-"}$
                           {transaction.amount}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-400">
                           {transaction.time}
                         </div>
                       </div>
@@ -199,9 +199,12 @@ export default function Report() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50">
+      <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-800 border-t border-gray-700 z-50">
         <div className="flex justify-between items-center px-6 py-4">
-          <Link to={"/dashboard"} className="flex flex-col items-center">
+          <Link
+            to={"/dashboard"}
+            className="flex flex-col items-center text-gray-300"
+          >
             <Home size={20} />
             <span className="text-xs mt-1">Home</span>
           </Link>
@@ -214,7 +217,7 @@ export default function Report() {
           </Link>
           <Link
             to={"/report"}
-            className="flex flex-col items-center text-gray-400"
+            className="flex flex-col items-center text-blue-400"
           >
             <PieChart size={20} />
             <span className="text-xs mt-1">Report</span>

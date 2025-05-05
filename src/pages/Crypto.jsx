@@ -346,7 +346,7 @@ export default function CryptoTracker() {
   ]);
   const [lastRefreshed, setLastRefreshed] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [globalMarketData, setGlobalMarketData] = useState({
     marketCap: "2.65T",
     btcDominance: "52.14",
@@ -1294,7 +1294,10 @@ export default function CryptoTracker() {
         </div> */}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50">
+      {/* Footer */}
+      {/* Bottom Navigation */}
+
+      <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-800 border-t border-gray-700 z-50">
         <div className="flex justify-between items-center px-6 py-4">
           <Link to={"/dashboard"} className="flex flex-col items-center">
             <Home size={20} />
@@ -1302,19 +1305,19 @@ export default function CryptoTracker() {
           </Link>
           <Link
             to={"/stocks"}
-            className="flex flex-col items-center text-gray-400"
+            className="flex flex-col items-center text-gray-500"
           >
             <ChartBarIncreasing size={20} />
             <span className="text-xs mt-1">Insight</span>
           </Link>
           <Link
             to={"/report"}
-            className="flex flex-col items-center text-gray-400"
+            className="flex flex-col items-center text-gray-500"
           >
             <PieChart size={20} />
             <span className="text-xs mt-1">Report</span>
           </Link>
-          <Link to={"/cs"} className="flex flex-col items-center text-gray-400">
+          <Link to={"/cs"} className="flex flex-col items-center text-gray-500">
             <User size={20} />
             <span className="text-xs mt-1">Customer service</span>
           </Link>

@@ -359,26 +359,26 @@ export default function CustomerServiceChat() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 py-4 px-6">
+      <header className="bg-gray-800 shadow-md border-b border-gray-700 py-4 px-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Menu
-              className="h-6 w-6 text-gray-500 md:hidden mr-4 cursor-pointer"
+              className="h-6 w-6 text-gray-300 md:hidden mr-4 cursor-pointer"
               onClick={() =>
                 setMobileView(mobileView === "list" ? "chat" : "list")
               }
             />
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className="text-xl font-semibold text-white">
               Customer Support
             </h1>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="text-gray-500 hover:text-gray-700">
+            <button className="text-gray-300 hover:text-white">
               <Bell className="h-5 w-5" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
               <User className="h-4 w-4" />
             </div>
           </div>
@@ -389,17 +389,17 @@ export default function CustomerServiceChat() {
       <div className="flex flex-1 overflow-hidden">
         {/* Customer List Sidebar */}
         <div
-          className={`w-full md:w-80 bg-white border-r border-gray-200 flex flex-col ${
+          className={`w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col ${
             mobileView === "chat" ? "hidden md:flex" : "flex"
           }`}
         >
           {/* Search */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-gray-700">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search customers..."
-                className="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Search users..."
+                className="w-full py-2 pl-10 pr-4 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -410,22 +410,22 @@ export default function CustomerServiceChat() {
           {/* Customer List with Loading State */}
           <div className="flex-1 overflow-y-auto">
             {loading && users.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">
-                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-400 mb-2"></div>
-                <p>Loading customers...</p>
+              <div className="p-4 text-center text-gray-400">
+                <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-300 mb-2"></div>
+                <p>Loading users...</p>
               </div>
             ) : (
               <>
                 {filteredUsers.map((user) => (
                   <div
                     key={user.id}
-                    className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer flex items-start ${
-                      selectedUserId === user.id ? "bg-blue-50" : ""
+                    className={`p-4 border-b border-gray-700 hover:bg-gray-700 cursor-pointer flex items-start ${
+                      selectedUserId === user.id ? "bg-gray-700" : ""
                     }`}
                     onClick={() => handleSelectUser(user.id)}
                   >
                     <div className="relative mr-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-medium">
+                      <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-gray-200 font-medium">
                         {user.avatar &&
                         typeof user.avatar === "string" &&
                         user.avatar.length <= 2
@@ -433,28 +433,28 @@ export default function CustomerServiceChat() {
                           : user.name.substring(0, 2)}
                       </div>
                       <span
-                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-gray-800 ${
                           user.status === "active"
                             ? "bg-green-400"
-                            : "bg-gray-400"
+                            : "bg-gray-500"
                         }`}
                       ></span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-baseline">
-                        <h3 className="text-sm font-medium text-gray-900 truncate">
+                        <h3 className="text-sm font-medium text-white truncate">
                           {user.name}
                         </h3>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-400">
                           {user.time}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-500 truncate">
+                      <p className="text-sm text-gray-400 truncate">
                         {user.lastMessage}
                       </p>
                     </div>
                     {user.unread > 0 && (
-                      <span className="ml-2 bg-blue-500 text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                      <span className="ml-2 bg-blue-600 text-white text-xs font-medium px-2 py-0.5 rounded-full">
                         {user.unread}
                       </span>
                     )}
@@ -462,8 +462,8 @@ export default function CustomerServiceChat() {
                 ))}
 
                 {filteredUsers.length === 0 && (
-                  <div className="p-4 text-center text-gray-500">
-                    No customers found
+                  <div className="p-4 text-center text-gray-400">
+                    No users found
                   </div>
                 )}
               </>
@@ -480,16 +480,16 @@ export default function CustomerServiceChat() {
           {selectedUser ? (
             <>
               {/* Chat Header */}
-              <div className="bg-white border-b border-gray-200 p-4 flex justify-between items-center shadow-sm">
+              <div className="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center shadow-md">
                 <div className="flex items-center">
                   <div className="md:hidden mr-2">
                     <ChevronLeft
-                      className="h-6 w-6 text-gray-500 cursor-pointer"
+                      className="h-6 w-6 text-gray-300 cursor-pointer"
                       onClick={() => setMobileView("list")}
                     />
                   </div>
                   <div className="relative mr-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-medium">
+                    <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-gray-200 font-medium">
                       {selectedUser.avatar &&
                       typeof selectedUser.avatar === "string" &&
                       selectedUser.avatar.length <= 2
@@ -497,42 +497,42 @@ export default function CustomerServiceChat() {
                         : selectedUser.name.substring(0, 2)}
                     </div>
                     <span
-                      className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                      className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-gray-800 ${
                         selectedUser.status === "active"
                           ? "bg-green-400"
-                          : "bg-gray-400"
+                          : "bg-gray-500"
                       }`}
                     ></span>
                   </div>
                   <div>
-                    <h2 className="text-sm font-medium text-gray-900">
+                    <h2 className="text-sm font-medium text-white">
                       {selectedUser.name}
                     </h2>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-400">
                       {selectedUser.status === "active" ? "Online" : "Offline"}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <button className="text-gray-500 hover:text-gray-700">
+                  <button className="text-gray-300 hover:text-white">
                     <Phone className="h-5 w-5" />
                   </button>
-                  <button className="text-gray-500 hover:text-gray-700">
+                  <button className="text-gray-300 hover:text-white">
                     <Video className="h-5 w-5" />
                   </button>
-                  <button className="text-gray-500 hover:text-gray-700">
+                  <button className="text-gray-300 hover:text-white">
                     <MoreHorizontal className="h-5 w-5" />
                   </button>
                 </div>
               </div>
 
               {/* Messages with Loading State */}
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+              <div className="flex-1 overflow-y-auto p-4 bg-gray-900">
                 {loading ? (
                   <div className="flex justify-center items-center h-full">
                     <div className="text-center">
-                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-400 mb-2"></div>
-                      <p className="text-gray-500">Loading messages...</p>
+                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-300 mb-2"></div>
+                      <p className="text-gray-400">Loading messages...</p>
                     </div>
                   </div>
                 ) : (
@@ -548,7 +548,7 @@ export default function CustomerServiceChat() {
                           }`}
                         >
                           {message.sender === "agent" && (
-                            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-1">
+                            <div className="h-8 w-8 rounded-full bg-blue-900 flex items-center justify-center text-blue-300 mr-2 mt-1">
                               <User className="h-4 w-4" />
                             </div>
                           )}
@@ -556,16 +556,16 @@ export default function CustomerServiceChat() {
                           <div
                             className={`max-w-xs md:max-w-md p-3 rounded-lg ${
                               message.sender === "agent"
-                                ? "bg-white text-gray-800 border border-gray-200 rounded-bl-none"
-                                : "bg-blue-500 text-white rounded-br-none"
+                                ? "bg-gray-800 text-gray-200 border border-gray-700 rounded-bl-none"
+                                : "bg-blue-600 text-white rounded-br-none"
                             }`}
                           >
                             <p className="text-sm">{message.message}</p>
                             <p
                               className={`text-xs mt-1 ${
                                 message.sender === "agent"
-                                  ? "text-gray-500"
-                                  : "text-blue-100"
+                                  ? "text-gray-400"
+                                  : "text-blue-200"
                               }`}
                             >
                               {message.time}
@@ -574,7 +574,7 @@ export default function CustomerServiceChat() {
                         </div>
                       ))
                     ) : (
-                      <div className="text-center p-4 text-gray-500">
+                      <div className="text-center p-4 text-gray-400">
                         No messages yet. Start the conversation!
                       </div>
                     )}
@@ -584,15 +584,15 @@ export default function CustomerServiceChat() {
               </div>
 
               {/* Message Input */}
-              <div className="bg-white border-t border-gray-200 p-4">
+              <div className="bg-gray-800 border-t border-gray-700 p-4">
                 <div className="flex items-center space-x-2">
-                  <button className="p-2 text-gray-500 hover:text-gray-700">
+                  <button className="p-2 text-gray-300 hover:text-white">
                     <Paperclip className="h-5 w-5" />
                   </button>
                   <input
                     type="text"
                     placeholder="Type your message..."
-                    className="flex-1 py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 py-2 px-4 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) =>
@@ -603,14 +603,14 @@ export default function CustomerServiceChat() {
                   <button
                     className={`p-2 rounded-lg transition-colors ${
                       isSending || loading || !newMessage.trim()
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-blue-500 text-white hover:bg-blue-600"
+                        ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
                     }`}
                     onClick={handleSendMessage}
                     disabled={isSending || loading || !newMessage.trim()}
                   >
                     {isSending ? (
-                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="h-5 w-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
                     ) : (
                       <SendHorizontal className="h-5 w-5" />
                     )}
@@ -619,13 +619,13 @@ export default function CustomerServiceChat() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center p-4 bg-gray-50">
+            <div className="flex-1 flex items-center justify-center p-4 bg-gray-900">
               <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">
+                <MessageSquare className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white">
                   Select a customer to start chatting
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-400">
                   Choose a customer from the list to view messages
                 </p>
               </div>
@@ -637,13 +637,13 @@ export default function CustomerServiceChat() {
         {filteredUsers.length === 0 &&
           mobileView === "chat" &&
           !selectedUser && (
-            <div className="flex-1 flex items-center justify-center p-4 bg-gray-50">
+            <div className="flex-1 flex items-center justify-center p-4 bg-gray-900">
               <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">
+                <MessageSquare className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white">
                   No customers found
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-400">
                   Try adjusting your search criteria
                 </p>
               </div>

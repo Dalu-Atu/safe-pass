@@ -37,7 +37,7 @@ function InvestmentROIDashboard() {
       roi: 15.4,
       profit: 2340.0,
       trend: "up",
-      icon: <TrendingUp size={18} className="text-blue-500" />,
+      icon: <TrendingUp size={18} className="text-blue-400" />,
     },
     {
       name: "Real Estate Fund",
@@ -45,7 +45,7 @@ function InvestmentROIDashboard() {
       roi: 8.7,
       profit: 1250.0,
       trend: "up",
-      icon: <PieChart size={18} className="text-purple-500" />,
+      icon: <PieChart size={18} className="text-purple-400" />,
     },
     {
       name: "Crypto Portfolio",
@@ -53,7 +53,7 @@ function InvestmentROIDashboard() {
       roi: -3.2,
       profit: -450.0,
       trend: "down",
-      icon: <TrendingUp size={18} className="text-orange-500" />,
+      icon: <TrendingUp size={18} className="text-orange-400" />,
     },
   ];
 
@@ -62,8 +62,10 @@ function InvestmentROIDashboard() {
       {/* ROI Performance */}
       <div className="px-6">
         <div className="flex justify-between items-center">
-          <h3 className="font-medium text-lg">Investment Performance</h3>
-          <button className="text-sm text-blue-600">See all</button>
+          <h3 className="font-medium text-lg text-gray-200">
+            Investment Performance
+          </h3>
+          <button className="text-sm text-blue-400">See all</button>
         </div>
 
         {/* Filters */}
@@ -71,8 +73,8 @@ function InvestmentROIDashboard() {
           <button
             className={`text-sm ${
               activeFilter === "All"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-400"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-gray-500"
             } pb-1`}
             onClick={() => setActiveFilter("All")}
           >
@@ -81,8 +83,8 @@ function InvestmentROIDashboard() {
           <button
             className={`text-sm ${
               activeFilter === "Profitable"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-400"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-gray-500"
             } pb-1`}
             onClick={() => setActiveFilter("Profitable")}
           >
@@ -91,8 +93,8 @@ function InvestmentROIDashboard() {
           <button
             className={`text-sm ${
               activeFilter === "Loss"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-400"
+                ? "text-blue-400 border-b-2 border-blue-400"
+                : "text-gray-500"
             } pb-1`}
             onClick={() => setActiveFilter("Loss")}
           >
@@ -106,19 +108,21 @@ function InvestmentROIDashboard() {
             <div
               key={index}
               className={`flex items-center justify-between ${
-                index > 0 ? "pt-4 border-t border-gray-100" : ""
+                index > 0 ? "pt-4 border-t border-gray-700" : ""
               }`}
             >
               <div className="flex items-center">
                 <div
                   className={`${
-                    investment.trend === "up" ? "bg-blue-100" : "bg-orange-100"
+                    investment.trend === "up" ? "bg-blue-900" : "bg-orange-900"
                   } p-3 rounded-full mr-3`}
                 >
                   {investment.icon}
                 </div>
                 <div>
-                  <div className="font-medium">{investment.name}</div>
+                  <div className="font-medium text-gray-200">
+                    {investment.name}
+                  </div>
                   <div className="text-xs text-gray-500">
                     {investment.category}
                   </div>
@@ -128,8 +132,8 @@ function InvestmentROIDashboard() {
                 <div
                   className={`font-medium ${
                     investment.trend === "up"
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {investment.roi > 0 ? "+" : ""}
@@ -138,8 +142,8 @@ function InvestmentROIDashboard() {
                 <div
                   className={`text-sm ${
                     investment.trend === "up"
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {investment.profit > 0 ? "+" : ""}$
@@ -185,16 +189,16 @@ function QRCode() {
   const size = qrData.length * cellSize + 2 * margin;
 
   return (
-    <div className="bg-white p-3 border border-gray-200 rounded-xl mb-4">
+    <div className="bg-gray-800 p-3 border border-gray-700 rounded-xl mb-4">
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="w-48 h-48"
         style={{
-          background: "#fff",
+          background: "#1f2937",
           padding: "12px",
         }}
       >
-        <rect x="0" y="0" width={size} height={size} fill="white" />
+        <rect x="0" y="0" width={size} height={size} fill="#1f2937" />
         {qrData.map((row, i) =>
           row.map(
             (cell, j) =>
@@ -205,7 +209,7 @@ function QRCode() {
                   y={i * cellSize + margin}
                   width={cellSize}
                   height={cellSize}
-                  fill="black"
+                  fill="white"
                 />
               )
           )
@@ -261,7 +265,7 @@ export default function Dashboard() {
   // Main Home Screen
   if (!showPaymentPage) {
     return (
-      <div className="flex flex-col h-screen bg-white text-gray-800 font-sans max-w-md mx-auto overflow-hidden relative">
+      <div className="flex flex-col h-screen bg-gray-900 text-gray-200 font-sans max-w-md mx-auto overflow-hidden relative">
         <div className="px-6 pt-4 pb-2 flex items-center justify-between">
           <div className="flex items-center">
             <div className="rounded-full overflow-hidden w-10 h-10 mr-3 border-2 border-blue-500">
@@ -272,16 +276,16 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <div className="font-medium text-blue-800">Hi, {user.name}</div>
-              <div className="text-xs text-gray-500">Welcome back!</div>
+              <div className="font-medium text-blue-400">Hi, {user.name}</div>
+              <div className="text-xs text-gray-400">Welcome back!</div>
             </div>
           </div>
           <Link to={"/cs"} className="relative top--9">
-            <MessageCircle color="grey" size={"20px"} />
+            <MessageCircle color="#9ca3af" size={"20px"} />
           </Link>
         </div>
         {/* Balance Card */}
-        <div className="mx-6 rounded-xl p-5 text-white bg-gradient-to-br from-purple-600 via-red-600 to-purple-800">
+        <div className="mx-6 rounded-xl p-5 text-white bg-gradient-to-r from-blue-800 to-purple-900">
           <div className="text-lg font-medium">Balance</div>
 
           <div className="flex items-center mt-1">
@@ -297,8 +301,8 @@ export default function Dashboard() {
           </div>
 
           <div className="flex justify-between items-center mt-4">
-            <div className="text-sm text-gray-200">**** **** **** 4312</div>
-            <div className="bg-white rounded w-10 h-6 flex items-center justify-center">
+            <div className="text-sm text-gray-300">**** **** **** 4312</div>
+            <div className="bg-gray-800 rounded w-10 h-6 flex items-center justify-center">
               <svg
                 viewBox="0 0 1000 324.68"
                 xmlns="http://www.w3.org/2000/svg"
@@ -327,35 +331,35 @@ export default function Dashboard() {
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 px-6 mt-4">
           <button
-            className="flex items-center bg-gray-100 rounded-xl p-3"
+            className="flex items-center bg-gray-800 rounded-xl p-3"
             onClick={handleAddFunds}
           >
-            <div className="bg-blue-100 p-2 rounded-full mr-2">
-              <Plus size={16} className="text-blue-600" />
+            <div className="bg-blue-900 p-2 rounded-full mr-2">
+              <Plus size={16} className="text-blue-400" />
             </div>
             <span className="text-sm font-medium">Add Funds</span>
           </button>
           <Link
             to={"/stocks"}
-            className="flex items-center bg-gray-100 rounded-xl p-3"
+            className="flex items-center bg-gray-800 rounded-xl p-3"
           >
-            <div className="bg-blue-100 p-2 rounded-full mr-2">
-              <ArrowUpRight size={16} className="text-blue-600" />
+            <div className="bg-blue-900 p-2 rounded-full mr-2">
+              <ArrowUpRight size={16} className="text-blue-400" />
             </div>
             <span className="text-sm font-medium">View Stocks</span>
           </Link>
           <Link
             to={"/cryptos"}
-            className="flex items-center bg-gray-100 rounded-xl p-3"
+            className="flex items-center bg-gray-800 rounded-xl p-3"
           >
-            <div className="bg-blue-100 p-2 rounded-full mr-2">
-              <CheckSquare size={16} className="text-blue-600" />
+            <div className="bg-blue-900 p-2 rounded-full mr-2">
+              <CheckSquare size={16} className="text-blue-400" />
             </div>
             <span className="text-sm font-medium">View Cryptos</span>
           </Link>
-          {/* <button className="flex items-center bg-gray-100 rounded-xl p-3">
-            <div className="bg-blue-100 p-2 rounded-full mr-2">
-              <DollarSign size={16} className="text-blue-600" />
+          {/* <button className="flex items-center bg-gray-800 rounded-xl p-3">
+            <div className="bg-blue-900 p-2 rounded-full mr-2">
+              <DollarSign size={16} className="text-blue-400" />
             </div>
             <span className="text-sm font-medium">Withdraw</span>
           </button> */}
@@ -363,7 +367,7 @@ export default function Dashboard() {
         {/* Transaction History */}
         <InvestmentROIDashboard />
         {/* Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50">
+        <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-800 border-t border-gray-700 z-50">
           <div className="flex justify-between items-center px-6 py-4">
             <Link to={"/dashboard"} className="flex flex-col items-center">
               <Home size={20} />
@@ -371,21 +375,21 @@ export default function Dashboard() {
             </Link>
             <Link
               to={"/stocks"}
-              className="flex flex-col items-center text-gray-400"
+              className="flex flex-col items-center text-gray-500"
             >
               <ChartBarIncreasing size={20} />
               <span className="text-xs mt-1">Insight</span>
             </Link>
             <Link
               to={"/report"}
-              className="flex flex-col items-center text-gray-400"
+              className="flex flex-col items-center text-gray-500"
             >
               <PieChart size={20} />
               <span className="text-xs mt-1">Report</span>
             </Link>
             <Link
               to={"/cs"}
-              className="flex flex-col items-center text-gray-400"
+              className="flex flex-col items-center text-gray-500"
             >
               <User size={20} />
               <span className="text-xs mt-1">Customer service</span>
@@ -399,15 +403,17 @@ export default function Dashboard() {
         {showAddFundsModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
-              className="absolute inset-0 bg-gray-300 bg-opacity-50"
+              className="absolute inset-0 bg-black bg-opacity-70"
               onClick={handleCloseModal}
             ></div>
-            <div className="bg-white rounded-2xl p-6 w-11/12 max-w-md z-50">
+            <div className="bg-gray-800 rounded-2xl p-6 w-11/12 max-w-md z-50">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold">Add Funds</h3>
+                <h3 className="text-xl font-semibold text-gray-200">
+                  Add Funds
+                </h3>
                 <button
                   onClick={handleCloseModal}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-400 hover:text-gray-300"
                 >
                   <X size={20} />
                 </button>
@@ -415,19 +421,19 @@ export default function Dashboard() {
               <div className="mb-4">
                 <label
                   htmlFor="funds-amount"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-300 mb-1"
                 >
                   Enter amount to add (USD)
                 </label>
                 <div className="relative mt-1 rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">$</span>
+                    <span className="text-gray-400 sm:text-sm">$</span>
                   </div>
                   <input
                     type="number"
                     name="funds-amount"
                     id="funds-amount"
-                    className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 py-3 sm:text-sm border-gray-300 rounded-md border"
+                    className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 py-3 sm:text-sm border-gray-600 rounded-md border bg-gray-700 text-white"
                     placeholder="0.00"
                     aria-describedby="funds-amount-currency"
                     value={fundsAmount}
@@ -435,7 +441,7 @@ export default function Dashboard() {
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <span
-                      className="text-gray-500 sm:text-sm"
+                      className="text-gray-400 sm:text-sm"
                       id="funds-amount-currency"
                     >
                       USD
@@ -443,13 +449,13 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-400 mb-4">
                 You will be redirected to the payment page after confirmation.
               </p>
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={handleCloseModal}
-                  className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex justify-center py-2 px-4 border border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Cancel
                 </button>
@@ -470,9 +476,9 @@ export default function Dashboard() {
 
   // USDT Payment Page
   return (
-    <div className="flex flex-col h-screen bg-white text-gray-800 font-sans max-w-md mx-auto overflow-hidden relative">
+    <div className="flex flex-col h-screen bg-gray-900 text-gray-200 font-sans max-w-md mx-auto overflow-hidden relative">
       <div className="px-6 pt-4 pb-2 flex items-center">
-        <button onClick={handleBackToHome} className="text-blue-600 mr-2">
+        <button onClick={handleBackToHome} className="text-blue-400 mr-2">
           <svg
             width="24"
             height="24"
@@ -491,18 +497,18 @@ export default function Dashboard() {
       </div>
       {/* Payment Information */}
       <div className="px-6 py-4">
-        <div className="bg-blue-50 rounded-xl p-5 mb-6">
+        <div className="bg-gray-800 rounded-xl p-5 mb-6">
           <div className="flex justify-between items-center">
-            <div className="text-gray-700">Amount</div>
+            <div className="text-gray-300">Amount</div>
             <div className="text-xl font-bold">${fundsAmount}</div>
           </div>
           <div className="flex justify-between items-center mt-2">
-            <div className="text-gray-700">USDT (TRC20)</div>
+            <div className="text-gray-300">USDT (TRC20)</div>
             <div className="text-lg font-medium">
               {parseFloat(fundsAmount).toFixed(2)} USDT
             </div>
           </div>
-          <div className="flex items-center mt-4 text-orange-500">
+          <div className="flex items-center mt-4 text-orange-400">
             <Clock size={16} className="mr-1" />
             <div className="text-sm">
               Payment expires in: {formatTime(countdown)}
@@ -513,27 +519,27 @@ export default function Dashboard() {
         {/* QR Code */}
         <div className="flex flex-col items-center mb-6">
           <QRCode />
-          <div className="text-sm font-medium text-gray-700 mt-2 mb-1">
+          <div className="text-sm font-medium text-gray-300 mt-2 mb-1">
             SCAN QR CODE TO PAY
           </div>
         </div>
 
         {/* Wallet Address */}
-        <div className="border border-gray-200 rounded-lg p-4 mb-6">
+        <div className="border border-gray-700 rounded-lg p-4 mb-6">
           <div className="flex justify-between items-center mb-1">
-            <div className="text-sm font-medium text-gray-700">
+            <div className="text-sm font-medium text-gray-300">
               USDT Address (TRC20)
             </div>
             <button
               onClick={() =>
                 copyToClipboard("TYQraQ1YkCZehxYzRFKCkpWY9QQMYgGAZ8")
               }
-              className="text-blue-600"
+              className="text-blue-400"
             >
               <Copy size={16} />
             </button>
           </div>
-          <div className="text-sm font-mono bg-gray-50 p-3 rounded break-all select-all">
+          <div className="text-sm font-mono bg-gray-800 p-3 rounded break-all select-all">
             TYQraQ1YkCZehxYzRFKCkpWY9QQMYgGAZ8
           </div>
           <div className="flex items-center mt-4">
@@ -622,7 +628,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="sticky bottom-0 w-full bg-white border-t border-gray-200 p-6">
+      <div className="sticky bottom-0 w-full bg-gray-300 border-t border-gray-200 p-6">
         <button
           onClick={handleBackToHome}
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium"

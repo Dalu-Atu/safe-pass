@@ -16,6 +16,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { initializeSupabase } from "./services/userService";
 import { useEffect } from "react";
 import CustomerServiceChat from "./pages/adminChat";
+import FinanceHubLanding from "./pages/LandingPage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -54,7 +55,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<FinanceHubLanding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route

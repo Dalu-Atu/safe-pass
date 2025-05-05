@@ -215,40 +215,40 @@ export default function ModernCustomerSupport() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gray-900">
       {/* Header - Fixed at the top */}
-      <div className="bg-white border-b-gray-900 shadow-md sticky top-0 z-10">
+      <div className="bg-gray-800 border-b border-gray-700 shadow-md sticky top-0 z-10">
         <div className="max-w-6xl mx-auto">
           <div className="p-3 flex items-center">
-            <Link to={-1} className="md:hidden p-2 text-gray-600">
+            <Link to={-1} className="md:hidden p-2 text-gray-300">
               <ArrowLeft size={20} />
             </Link>
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                <div className="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center text-blue-300">
                   ET
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800"></div>
               </div>
               <div>
-                <h3 className="font-medium">Emma Thompson</h3>
-                <p className="text-xs text-green-500">
+                <h3 className="font-medium text-white">Emma Thompson</h3>
+                <p className="text-xs text-green-400">
                   Customer Service • Online
                 </p>
               </div>
             </div>
 
             <div className="ml-auto flex items-center space-x-3">
-              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600">
                 <Phone size={16} />
               </button>
-              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600">
                 <Video size={16} />
               </button>
-              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+              <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600">
                 <Info size={16} />
               </button>
-              <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+              <button className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-gray-300 hover:bg-gray-600">
                 <MoreVertical size={16} />
               </button>
             </div>
@@ -258,13 +258,13 @@ export default function ModernCustomerSupport() {
 
       {/* Chat area - Scrollable middle section */}
       <div
-        className="flex-1 overflow-y-auto bg-gray-50"
-        style={{ height: "calc(100vh - 140px)" }}
+        className="flex-1 overflow-y-auto bg-gray-850"
+        style={{ height: "calc(100vh - 140px)", backgroundColor: "#1a1d21" }}
       >
         <div className="max-w-3xl mx-auto space-y-4 p-4">
           {/* Date separator */}
           <div className="flex justify-center">
-            <div className="text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">
+            <div className="text-xs bg-gray-700 text-gray-300 px-3 py-1 rounded-full">
               Today
             </div>
           </div>
@@ -278,39 +278,39 @@ export default function ModernCustomerSupport() {
               }`}
             >
               {message.sender === "agent" && (
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2 mt-1">
+                <div className="w-8 h-8 rounded-full bg-blue-900 flex items-center justify-center text-blue-300 mr-2 mt-1">
                   ET
                 </div>
               )}
 
               {message.sender === "typing" ? (
-                <div className="bg-white p-3 rounded-lg shadow-sm max-w-xs md:max-w-md">
+                <div className="bg-gray-800 p-3 rounded-lg shadow-md max-w-xs md:max-w-md">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.4s" }}
                     ></div>
                   </div>
                 </div>
               ) : (
                 <div
-                  className={`p-3 rounded-lg shadow-sm max-w-xs md:max-w-md ${
+                  className={`p-3 rounded-lg shadow-md max-w-xs md:max-w-md ${
                     message.sender === "user"
-                      ? "bg-blue-600 text-white rounded-br-none"
-                      : "bg-white text-gray-800 rounded-bl-none"
+                      ? "bg-blue-700 text-white rounded-br-none"
+                      : "bg-gray-800 text-gray-200 rounded-bl-none"
                   }`}
                 >
                   <div className="text-sm">{message.text}</div>
                   <div
                     className={`text-xs mt-1 ${
                       message.sender === "user"
-                        ? "text-blue-100"
-                        : "text-gray-500"
+                        ? "text-blue-200"
+                        : "text-gray-400"
                     }`}
                   >
                     {message.time}
@@ -325,9 +325,9 @@ export default function ModernCustomerSupport() {
       </div>
 
       {/* Input area - Fixed at the bottom */}
-      <div className="bg-gray-100  shadow-md  p-3 sticky bottom-0 z-10">
+      <div className="bg-gray-800 shadow-md p-3 sticky bottom-0 z-10">
         <div className="max-w-3xl mx-auto flex items-center">
-          <button className="p-2 text-gray-500 hover:text-gray-700">
+          <button className="p-2 text-gray-400 hover:text-gray-200">
             <Paperclip size={20} />
           </button>
           <div className="flex-1 mx-2">
@@ -337,17 +337,17 @@ export default function ModernCustomerSupport() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
               placeholder="Type your message..."
-              className="w-full p-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300"
+              className="w-full p-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-700 bg-gray-700 text-gray-200 placeholder-gray-400"
             />
           </div>
-          <button className="p-2 text-gray-500 hover:text-gray-700">
+          <button className="p-2 text-gray-400 hover:text-gray-200">
             <Smile size={20} />
           </button>
           <button
             onClick={handleSendMessage}
             disabled={!input.trim()}
             className={`p-2 rounded-full ${
-              input.trim() ? "text-blue-600 hover:bg-blue-50" : "text-gray-400"
+              input.trim() ? "text-blue-400 hover:bg-gray-700" : "text-gray-500"
             }`}
           >
             <SendHorizontal size={20} />

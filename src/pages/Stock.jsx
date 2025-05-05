@@ -210,26 +210,13 @@ export default function StockTracker() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Header */}
-      <header className="text-white bg-gradient-to-br from-purple-600 via-red-600 to-purple-800 shadow-lg">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl md:text-3xl font-bold flex items-center justify-center gap-2">
-            <TrendingUp className="h-6 w-6" />
-            View Stocks
-          </h1>
-          <p className="text-center text-blue-100 mt-1">
-            Real-time market insights at your fingertips
-          </p>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gray-900 text-gray-100">
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         {/* API Key Notice */}
 
         {/* Search Section */}
-        <div className="bg-white rounded-xl shadow-md p-4 md:p-6 mb-6">
+        <div className="bg-gray-800 rounded-xl shadow-md p-4 md:p-6 mb-6">
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative flex-grow">
               <input
@@ -237,7 +224,7 @@ export default function StockTracker() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Enter stock symbol (e.g., AAPL)"
-                className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 pl-10 border border-gray-700 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <Search className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
             </div>
@@ -252,7 +239,7 @@ export default function StockTracker() {
 
           {/* Recent Searches */}
           <div className="mt-4">
-            <p className="text-sm text-gray-500 flex items-center gap-1 mb-2">
+            <p className="text-sm text-gray-400 flex items-center gap-1 mb-2">
               <Clock className="h-4 w-4" /> Recent searches:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -263,7 +250,7 @@ export default function StockTracker() {
                     setSearchTerm(symbol);
                     fetchStockData(symbol);
                   }}
-                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-300"
+                  className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded-full transition-colors duration-300"
                 >
                   {symbol}
                 </button>
@@ -275,22 +262,22 @@ export default function StockTracker() {
         {/* Stock Data Display */}
         {isLoading ? (
           <div className="text-center py-10">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Fetching stock data...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <p className="mt-4 text-gray-400">Fetching stock data...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 text-red-700 p-4 rounded-lg flex items-center gap-3">
+          <div className="bg-red-900 text-red-100 p-4 rounded-lg flex items-center gap-3">
             <AlertCircle className="h-6 w-6" />
             <p>{error}</p>
           </div>
         ) : stockData ? (
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-md overflow-hidden">
             {/* Stock Header */}
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-6 border-b border-gray-700">
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-2xl font-bold">{stockData.symbol}</h2>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-gray-400 text-sm mt-1">
                     {stockData.name} • {stockData.exchange}
                   </p>
                 </div>
@@ -301,8 +288,8 @@ export default function StockTracker() {
                   <div
                     className={`flex items-center gap-1 justify-end ${
                       parseFloat(stockData.change) >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-green-500"
+                        : "text-red-500"
                     }`}
                   >
                     <span>
@@ -320,37 +307,37 @@ export default function StockTracker() {
             {/* Stock Details */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Market Cap</p>
+                <p className="text-xs text-gray-400">Market Cap</p>
                 <p className="font-semibold">${stockData.marketCap}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Volume</p>
+                <p className="text-xs text-gray-400">Volume</p>
                 <p className="font-semibold">
                   {stockData.volume.toLocaleString()}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">P/E Ratio</p>
+                <p className="text-xs text-gray-400">P/E Ratio</p>
                 <p className="font-semibold">{stockData.pe}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Dividend Yield</p>
+                <p className="text-xs text-gray-400">Dividend Yield</p>
                 <p className="font-semibold">{stockData.dividend}</p>
               </div>
             </div>
 
             {/* Daily Range */}
             <div className="px-6 pb-6">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">
+              <h3 className="text-sm font-medium text-gray-400 mb-2">
                 Daily Range
               </h3>
               <div className="flex items-center gap-2">
                 <span className="text-sm">
                   ${parseFloat(stockData.low).toFixed(2)}
                 </span>
-                <div className="flex-grow h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="flex-grow h-2 bg-gray-700 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-600"
+                    className="h-full bg-blue-500"
                     style={{
                       width: `${
                         ((parseFloat(stockData.price) -
@@ -369,27 +356,27 @@ export default function StockTracker() {
             </div>
 
             {/* Additional Data */}
-            <div className="grid grid-cols-2 gap-4 p-6 bg-gray-50">
+            <div className="grid grid-cols-2 gap-4 p-6 bg-gray-900">
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Open</p>
+                <p className="text-xs text-gray-400">Open</p>
                 <p className="font-semibold">
                   ${parseFloat(stockData.open).toFixed(2)}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Previous Close</p>
+                <p className="text-xs text-gray-400">Previous Close</p>
                 <p className="font-semibold">
                   ${parseFloat(stockData.previousClose).toFixed(2)}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Day's High</p>
+                <p className="text-xs text-gray-400">Day's High</p>
                 <p className="font-semibold">
                   ${parseFloat(stockData.high).toFixed(2)}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-gray-500">Day's Low</p>
+                <p className="text-xs text-gray-400">Day's Low</p>
                 <p className="font-semibold">
                   ${parseFloat(stockData.low).toFixed(2)}
                 </p>
@@ -397,8 +384,8 @@ export default function StockTracker() {
             </div>
 
             {/* Latest Trading Day */}
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-              <p className="text-xs text-gray-500">
+            <div className="px-6 py-4 bg-gray-900 border-t border-gray-700">
+              <p className="text-xs text-gray-400">
                 Latest Trading Day:{" "}
                 <span className="font-medium">
                   {stockData.latestTradingDay}
@@ -407,13 +394,13 @@ export default function StockTracker() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="bg-gray-800 rounded-xl shadow-md p-6">
             <div className="text-center py-6">
-              <Search className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-700">
+              <Search className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-gray-300">
                 Search for a stock
               </h3>
-              <p className="text-gray-500 mt-2">
+              <p className="text-gray-400 mt-2">
                 Enter a stock symbol above to see detailed information
               </p>
             </div>
@@ -423,14 +410,14 @@ export default function StockTracker() {
         {/* Trending Stocks */}
         <div className="mt-6">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <BarChart2 className="h-5 w-5 text-blue-600" />
+            <BarChart2 className="h-5 w-5 text-blue-500" />
             Trending Stocks
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {trendingStocks.map((stock) => (
               <div
                 key={stock.symbol}
-                className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                className="bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
                 onClick={() => {
                   setSearchTerm(stock.symbol);
                   fetchStockData(stock.symbol);
@@ -439,7 +426,7 @@ export default function StockTracker() {
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="font-bold">{stock.symbol}</h3>
-                    <p className="text-sm text-gray-500">Stock</p>
+                    <p className="text-sm text-gray-400">Stock</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">
@@ -447,7 +434,7 @@ export default function StockTracker() {
                     </p>
                     <p
                       className={`text-sm ${
-                        stock.change >= 0 ? "text-green-600" : "text-red-600"
+                        stock.change >= 0 ? "text-green-500" : "text-red-500"
                       }`}
                     >
                       {stock.price === 0
@@ -465,7 +452,7 @@ export default function StockTracker() {
       {/* Footer */}
       {/* Bottom Navigation */}
 
-      <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50">
+      <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-800 border-t border-gray-700 z-50">
         <div className="flex justify-between items-center px-6 py-4">
           <Link to={"/dashboard"} className="flex flex-col items-center">
             <Home size={20} />
@@ -473,19 +460,19 @@ export default function StockTracker() {
           </Link>
           <Link
             to={"/stocks"}
-            className="flex flex-col items-center text-gray-400"
+            className="flex flex-col items-center text-gray-500"
           >
             <ChartBarIncreasing size={20} />
             <span className="text-xs mt-1">Insight</span>
           </Link>
           <Link
             to={"/report"}
-            className="flex flex-col items-center text-gray-400"
+            className="flex flex-col items-center text-gray-500"
           >
             <PieChart size={20} />
             <span className="text-xs mt-1">Report</span>
           </Link>
-          <Link to={"/cs"} className="flex flex-col items-center text-gray-400">
+          <Link to={"/cs"} className="flex flex-col items-center text-gray-500">
             <User size={20} />
             <span className="text-xs mt-1">Customer service</span>
           </Link>
