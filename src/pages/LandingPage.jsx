@@ -342,7 +342,7 @@ export default function FinanceHubLanding() {
                         href="/login"
                         className="rounded-md border border-gray-300 bg-gray-800 px-6 py-3 text-base font-medium text-gray-100 shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 text-center"
                       >
-                        Learn More
+                        Login
                       </a>
                     </div>
                   </div>
@@ -1547,7 +1547,7 @@ export default function FinanceHubLanding() {
                 href="/login"
                 className="rounded-md border border-gray-300 bg-gray-800 px-6 py-3 text-base font-medium text-gray-100 shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 text-center"
               >
-                Learn More
+                Login
               </a>
             </div>
           </div>
