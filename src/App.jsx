@@ -17,6 +17,7 @@ import { initializeSupabase } from "./services/userService";
 import { useEffect } from "react";
 import CustomerServiceChat from "./pages/adminChat";
 import FinanceHubLanding from "./pages/LandingPage";
+import BankTransferPage from "./pages/TransferToBank";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -63,6 +64,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CustomerServiceChat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transfer"
+            element={
+              <ProtectedRoute>
+                <BankTransferPage />
               </ProtectedRoute>
             }
           />

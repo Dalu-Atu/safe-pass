@@ -18,7 +18,12 @@ const Login = () => {
 
     try {
       const { user } = await login(email, password);
+      console.log(user);
 
+      if (user == "undefined" || !user) {
+        setError("Invalid login details");
+        setLoading(false);
+      }
       // Show loading spinner for 3 seconds before navigating
       setTimeout(() => {
         if (user.type === "admin") {

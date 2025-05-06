@@ -19,6 +19,7 @@ import {
   UserRound,
   MessageCircle,
   ChartBarIncreasing,
+  CircleDollarSign,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -357,6 +358,15 @@ export default function Dashboard() {
             </div>
             <span className="text-sm font-medium">View Cryptos</span>
           </Link>
+          <Link
+            to={"/transfer"}
+            className="flex items-center bg-gray-800 rounded-xl p-3"
+          >
+            <div className="bg-blue-900 p-2 rounded-full mr-2">
+              <CircleDollarSign size={16} className="text-blue-400" />
+            </div>
+            <span className="text-sm font-medium">Transfer to Bank</span>
+          </Link>
           {/* <button className="flex items-center bg-gray-800 rounded-xl p-3">
             <div className="bg-blue-900 p-2 rounded-full mr-2">
               <DollarSign size={16} className="text-blue-400" />
@@ -364,6 +374,7 @@ export default function Dashboard() {
             <span className="text-sm font-medium">Withdraw</span>
           </button> */}
         </div>
+
         {/* Transaction History */}
         <InvestmentROIDashboard />
         {/* Bottom Navigation */}
