@@ -7,8 +7,10 @@ import {
   FileText,
   DollarSign,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function BankTransferPage() {
+  const navigate = useNavigate();
   // Form state - completely separate objects for each concern
   const [formValues, setFormValues] = useState({
     accountName: "",
@@ -127,7 +129,7 @@ export default function BankTransferPage() {
       <div className="bg-gray-800 text-white px-4 py-3 border-b border-gray-700 sticky top-0 z-10 shadow-md">
         <div className="max-w-4xl mx-auto flex items-center">
           <button
-            onClick={() => window.history.back()}
+            onClick={() => navigate(-1)}
             className="mr-3 p-2 rounded-full hover:bg-gray-700 transition-colors"
             aria-label="Go back"
           >
