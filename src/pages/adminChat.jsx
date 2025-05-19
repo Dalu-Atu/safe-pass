@@ -12,12 +12,19 @@ import {
   SendHorizontal,
   Menu,
   MessageSquare,
+  UserPlus,
+  Edit,
+  X,
 } from "lucide-react";
 import {
   getAllUsers,
   addMessage,
   findUserByEmail,
+  addUser,
+  updateUser,
+  deleteUser,
 } from "../services/userService"; // Import user services
+import toast from "react-hot-toast";
 
 // Customer Service Chat Component
 export default function CustomerServiceChat() {
@@ -31,6 +38,55 @@ export default function CustomerServiceChat() {
   const [messages, setMessages] = useState([]);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // User management states
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [userFormData, setUserFormData] = useState({
+    email: "",
+    type: "user",
+    password: "",
+    name: "",
+    avatar: "",
+    total_balance: 0,
+    spendingByPeriod: {
+      Day: 0,
+      Week: 0,
+      Month: 0,
+      Year: 0,
+    },
+    categories: [
+      {
+        name: "Shopping",
+        color: "#7C3AED",
+        percentage: 15,
+      },
+      {
+        name: "Food",
+        color: "#EF4444",
+        percentage: 22,
+      },
+      {
+        name: "Entertainment",
+        color: "#3B82F6",
+        percentage: 8,
+      },
+      {
+        name: "Housing",
+        color: "#F59E0B",
+        percentage: 35,
+      },
+      {
+        name: "Others",
+        color: "#10B981",
+        percentage: 20,
+      },
+    ],
+    transactions: [],
+    messages: [],
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   // Add a ref to track if we've done initial user selection
   const initialUserSelectionDone = useRef(false);
@@ -358,6 +414,269 @@ export default function CustomerServiceChat() {
     }));
   }, [messages]);
 
+  // User Form Handlers
+  const handleUserFormChange = (e) => {
+    const { name, value } = e.target;
+    setUserFormData({ ...userFormData, [name]: value });
+
+    // Clear errors when field is changed
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: null });
+    }
+  };
+
+  const validateUserForm = () => {
+    const errors = {};
+    if (!userFormData.name.trim()) errors.name = "Name is required";
+    if (!userFormData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(userFormData.email)) {
+      errors.email = "Email is invalid";
+    }
+
+    // Check if email already exists (only for new users)
+    if (!isEditing && users.some((user) => user.id === userFormData.email)) {
+      errors.email = "Email already exists";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleAddUser = () => {
+    // Reset the form with all the required fields based on sample JSON
+    setUserFormData({
+      email: "",
+      type: "user",
+      password: "",
+      name: "",
+      avatar: "",
+      total_balance: 0,
+      spendingByPeriod: {
+        Day: 0,
+        Week: 0,
+        Month: 0,
+        Year: 0,
+      },
+      categories: [
+        {
+          name: "Shopping",
+          color: "#7C3AED",
+          percentage: 15,
+        },
+        {
+          name: "Food",
+          color: "#EF4444",
+          percentage: 22,
+        },
+        {
+          name: "Entertainment",
+          color: "#3B82F6",
+          percentage: 8,
+        },
+        {
+          name: "Housing",
+          color: "#F59E0B",
+          percentage: 35,
+        },
+        {
+          name: "Others",
+          color: "#10B981",
+          percentage: 20,
+        },
+      ],
+      transactions: [],
+      messages: [
+        {
+          id: 1,
+          sender: "agent",
+          name: "Emma Thompson",
+          text: "Hi there! Welcome to Our Support. How can I help you today?",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ],
+    });
+    setIsEditing(false);
+    setFormErrors({});
+    setShowUserModal(true);
+  };
+
+  const handleEditUser = () => {
+    if (!selectedUser) return;
+
+    // Find the full user data
+    const userToEdit = chattingUser || {};
+
+    // Create a complete user form data structure with all fields
+    setUserFormData({
+      email: userToEdit.email || "",
+      type: userToEdit.type || "user",
+      password: "", // Don't pre-fill password for security
+      name: userToEdit.name || "",
+      avatar: userToEdit.avatar || "",
+      total_balance: userToEdit.total_balance || 0,
+      spendingByPeriod: userToEdit.spendingByPeriod || {
+        Day: 0,
+        Week: 0,
+        Month: 0,
+        Year: 0,
+      },
+      categories: userToEdit.categories || [
+        { name: "Shopping", color: "#7C3AED", percentage: 15 },
+        { name: "Food", color: "#EF4444", percentage: 22 },
+        { name: "Entertainment", color: "#3B82F6", percentage: 8 },
+        { name: "Housing", color: "#F59E0B", percentage: 35 },
+        { name: "Others", color: "#10B981", percentage: 20 },
+      ],
+      transactions: userToEdit.transactions || [],
+      messages: userToEdit.messages || [],
+    });
+
+    setIsEditing(true);
+    setFormErrors({});
+    setShowUserModal(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (
+      !selectedUserId ||
+      !window.confirm("Are you sure you want to delete this user?")
+    )
+      return;
+
+    try {
+      await deleteUser(selectedUserId);
+
+      // Update users list
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user.id !== selectedUserId)
+      );
+
+      // Clear selection
+      setSelectedUserId(null);
+      setChattingUser(null);
+      setMessages([]);
+      setMobileView("list");
+
+      alert("User deleted successfully");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user. Please try again.");
+    }
+  };
+  const handleSubmitUserForm = async (e) => {
+    e.preventDefault();
+
+    if (!validateUserForm()) return;
+
+    try {
+      setIsSending(true);
+
+      // Prepare user data with the complete structure
+      const userData = { ...userFormData };
+
+      // Generate avatar initials if not provided
+      if (!userData.avatar && userData.name) {
+        // Extract initials from name (up to 2 characters)
+        userData.avatar = userData.name
+          .split(" ")
+          .map((part) => part[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+      }
+
+      // Ensure message has correct structure with timestamps
+      if (!userData.messages || userData.messages.length === 0) {
+        userData.messages = [
+          {
+            id: 1,
+            sender: "agent",
+            name: "Emma Thompson",
+            text: "Hi there! Welcome to Our Support. How can I help you today?",
+            time: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            timestamp: Date.now(),
+          },
+        ];
+      }
+
+      // Ensure empty transactions array if not provided
+      if (!userData.transactions) {
+        userData.transactions = [];
+      }
+
+      if (isEditing) {
+        // Update existing user
+        const oldEmail = selectedUserId;
+        const updatedUser = await updateUser(oldEmail, userData);
+
+        // Update UI
+        if (updatedUser) {
+          // Handle email change
+          if (oldEmail !== updatedUser.email) {
+            // Remove old user
+            setUsers((prevUsers) =>
+              prevUsers.filter((user) => user.id !== oldEmail)
+            );
+            setSelectedUserId(updatedUser.email);
+          }
+
+          // Add/update user in the list
+          const formattedUser = formatUserForChat(updatedUser);
+          setUsers((prevUsers) => {
+            const exists = prevUsers.some(
+              (user) => user.id === updatedUser.email
+            );
+            if (exists) {
+              return prevUsers.map((user) =>
+                user.id === updatedUser.email ? formattedUser : user
+              );
+            } else {
+              return [...prevUsers, formattedUser];
+            }
+          });
+
+          // Update current chat if this was the selected user
+          if (selectedUserId === oldEmail) {
+            setChattingUser(updatedUser);
+            setSelectedUserId(updatedUser.email);
+          }
+        }
+
+        toast.success("User updated successfully");
+      } else {
+        // Create new user
+        const newUser = await addUser(userData);
+
+        if (newUser) {
+          // Add new user to the list
+          const formattedUser = formatUserForChat(newUser);
+          setUsers((prevUsers) => [...prevUsers, formattedUser]);
+
+          // Select the new user
+          setSelectedUserId(newUser.email);
+          setChattingUser(newUser);
+          setMessages(newUser.messages || []);
+        }
+
+        toast.success("User added successfully");
+      }
+
+      // Close modal
+      setShowUserModal(false);
+    } catch (error) {
+      console.error("Error saving user:", error);
+      toast.error(error.message || "Failed to save user");
+    } finally {
+      setIsSending(false);
+    }
+  };
   return (
     <div className="flex flex-col h-screen bg-gray-900">
       {/* Header */}
@@ -393,17 +712,26 @@ export default function CustomerServiceChat() {
             mobileView === "chat" ? "hidden md:flex" : "flex"
           }`}
         >
-          {/* Search */}
+          {/* Search and Add User */}
           <div className="p-4 border-b border-gray-700">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search users..."
-                className="w-full py-2 pl-10 pr-4 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <div className="flex space-x-2">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  className="w-full py-2 pl-10 pr-4 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              </div>
+              <button
+                onClick={handleAddUser}
+                className="flex items-center justify-center p-2.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+                title="Add new user"
+              >
+                <UserPlus className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
@@ -479,7 +807,7 @@ export default function CustomerServiceChat() {
         >
           {selectedUser ? (
             <>
-              {/* Chat Header */}
+              {/* Chat Header with Edit Button */}
               <div className="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center shadow-md">
                 <div className="flex items-center">
                   <div className="md:hidden mr-2">
@@ -514,6 +842,13 @@ export default function CustomerServiceChat() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
+                  <button
+                    className="text-gray-300 hover:text-white"
+                    onClick={handleEditUser}
+                    title="Edit user"
+                  >
+                    <Edit className="h-5 w-5" />
+                  </button>
                   <button className="text-gray-300 hover:text-white">
                     <Phone className="h-5 w-5" />
                   </button>
@@ -650,6 +985,158 @@ export default function CustomerServiceChat() {
             </div>
           )}
       </div>
+
+      {/* User Add/Edit Modal */}
+      {/* User Add/Edit Modal */}
+      {showUserModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+            <div className="flex justify-between items-center p-6 border-b border-gray-700">
+              <h3 className="text-lg font-medium text-white">
+                {isEditing ? "Edit User" : "Add New User"}
+              </h3>
+              <button
+                onClick={() => setShowUserModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitUserForm} className="p-6 space-y-4">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={userFormData.name}
+                  onChange={handleUserFormChange}
+                  className={`w-full px-3 py-2 bg-gray-700 border ${
+                    formErrors.name ? "border-red-500" : "border-gray-600"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400`}
+                  placeholder="Enter user name"
+                />
+                {formErrors.name && (
+                  <p className="mt-1 text-sm text-red-400">{formErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={userFormData.email}
+                  onChange={handleUserFormChange}
+                  disabled={isEditing}
+                  className={`w-full px-3 py-2 bg-gray-700 border ${
+                    formErrors.email ? "border-red-500" : "border-gray-600"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 ${
+                    isEditing ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  placeholder="Enter email address"
+                />
+                {formErrors.email && (
+                  <p className="mt-1 text-sm text-red-400">
+                    {formErrors.email}
+                  </p>
+                )}
+                {isEditing && (
+                  <p className="mt-1 text-xs text-gray-400">
+                    Email cannot be changed
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="passsword"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={userFormData.password}
+                  onChange={handleUserFormChange}
+                  disabled={isEditing}
+                  className={`w-full px-3 py-2 bg-gray-700 border ${
+                    formErrors.password ? "border-red-500" : "border-gray-600"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 ${
+                    isEditing ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  placeholder="Enter Password"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="Balance"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Balance *
+                </label>
+                <input
+                  type="text"
+                  id="total_balance"
+                  name="total_balance"
+                  // value={userFormData.total_balance}
+                  onChange={handleUserFormChange}
+                  className={`w-full px-3 py-2 bg-gray-700 border ${
+                    formErrors.total_balance
+                      ? "border-red-500"
+                      : "border-gray-600"
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400`}
+                  placeholder="Enter Amount"
+                />
+                {formErrors.total_balance && (
+                  <p className="mt-1 text-sm text-red-400">
+                    {formErrors.total_balance}
+                  </p>
+                )}
+              </div>
+              <div className="flex space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {isEditing ? "Update User" : "Add User"}
+                </button>
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={handleDeleteUser}
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

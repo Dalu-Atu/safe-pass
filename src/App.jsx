@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import CustomerServiceChat from "./pages/adminChat";
 import FinanceHubLanding from "./pages/LandingPage";
 import BankTransferPage from "./pages/TransferToBank";
+import { Toaster } from "react-hot-toast";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -118,6 +119,7 @@ function App() {
           />
         </Routes>
       </AuthProvider>
+      <Toaster position="top-right" reverseOrder={false} />
     </BrowserRouter>
   );
 }

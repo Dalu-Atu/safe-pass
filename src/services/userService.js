@@ -41,8 +41,8 @@ const formatUser = (user) => {
     password: user.password, // Note: In production, passwords should never be returned
     name: user.name,
     avatar: user.avatar,
-    totalBalance: parseFloat(user.total_balance) || 0,
-    spendingByPeriod: user.spending_by_period || {
+    total_balance: parseFloat(user.total_balance) || 0,
+    spending_by_period: user.spending_by_period || {
       Day: 0,
       Week: 0,
       Month: 0,
@@ -99,6 +99,198 @@ export const getAllUsers = async () => {
 
 // Find user by email
 // Find user by email function (using Supabase client instead of direct REST)
+export const addUser = async (userData) => {
+  try {
+    // Validate required fields
+    if (!userData.email) {
+      throw new Error("Email is required");
+    }
+    if (!userData.name) {
+      throw new Error("Name is required");
+    }
+    if (!userData.password) {
+      throw new Error("Password is required");
+    }
+
+    // Check if user with this email already exists
+    const existingUser = await findUserByEmail(userData.email);
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Prepare the complete user object based on the sample JSON structure
+    const userToCreate = {
+      email: userData.email,
+      type: userData.type || "user",
+      password: userData.password, // Note: In production, you should hash passwords
+      name: userData.name,
+      avatar: userData.avatar || "",
+      total_balance: userData.total_balance || 0,
+      spending_by_period: userData.spending_by_period || {
+        Day: 0,
+        Week: 0,
+        Month: 0,
+        Year: 0,
+      },
+      categories: userData.categories || [
+        { name: "Shopping", color: "#7C3AED", percentage: 15 },
+        { name: "Food", color: "#EF4444", percentage: 22 },
+        { name: "Entertainment", color: "#3B82F6", percentage: 8 },
+        { name: "Housing", color: "#F59E0B", percentage: 35 },
+        { name: "Others", color: "#10B981", percentage: 20 },
+      ],
+      transactions: userData.transactions || [],
+      messages: userData.messages || [
+        {
+          id: 1,
+          sender: "agent",
+          name: "Emma Thompson",
+          text: "Hi there! Welcome to Our Support. How can I help you today?",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ],
+    };
+
+    // Insert the new user into the database
+    const { data, error } = await supabase
+      .from("users")
+      .insert([userToCreate])
+      .select();
+
+    if (error) {
+      console.error("Database error:", error);
+      throw new Error(error.message || "Failed to create user");
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error("Failed to create user");
+    }
+
+    return data[0]; // Return the newly created user
+  } catch (error) {
+    console.error("Error adding user:", error);
+    throw error;
+  }
+};
+
+export const updateUser = async (email, userData) => {
+  console.log(email, userData);
+
+  try {
+    if (!email) {
+      throw new Error("User email is required for update");
+    }
+
+    // Check if user exists
+    const existingUser = await findUserByEmail(email);
+    if (!existingUser) {
+      throw new Error(`User with email ${email} not found`);
+    }
+
+    // Prepare the update payload
+    const updatedUser = {
+      email: userData.email,
+      type: userData.type || existingUser.type || "user",
+      name: userData.name,
+      avatar: userData.avatar || existingUser.avatar || "",
+      total_balance: userData.total_balance || existingUser.total_balance || 0,
+      spending_by_period: userData.spending_by_period ||
+        existingUser.spending_by_period || {
+          Day: 0,
+          Week: 0,
+          Month: 0,
+          Year: 0,
+        },
+      categories: userData.categories ||
+        existingUser.categories || [
+          { name: "Shopping", color: "#7C3AED", percentage: 15 },
+          { name: "Food", color: "#EF4444", percentage: 22 },
+          { name: "Entertainment", color: "#3B82F6", percentage: 8 },
+          { name: "Housing", color: "#F59E0B", percentage: 35 },
+          { name: "Others", color: "#10B981", percentage: 20 },
+        ],
+      transactions: userData.transactions || existingUser.transactions || [],
+      messages: userData.messages || existingUser.messages || [],
+    };
+
+    // Only update password if provided (don't overwrite with blank)
+    if (userData.password) {
+      updatedUser.password = userData.password; // In production, should be hashed
+    } else {
+      // Keep existing password
+      updatedUser.password = existingUser.password;
+    }
+
+    // Handle email change case - if email changed, we need to delete and recreate
+    if (email !== userData.email) {
+      // First delete the old user
+      const { error: deleteError } = await supabase
+        .from("users")
+        .delete()
+        .eq("email", email);
+
+      if (deleteError) {
+        throw new Error(`Failed to update user email: ${deleteError.message}`);
+      }
+
+      // Then insert as a new user
+      const { data: insertData, error: insertError } = await supabase
+        .from("users")
+        .insert([updatedUser])
+        .select();
+
+      if (insertError) {
+        throw new Error(
+          `Failed to create user with new email: ${insertError.message}`
+        );
+      }
+
+      return insertData[0];
+    } else {
+      // Regular update if email hasn't changed
+      const { data, error } = await supabase
+        .from("users")
+        .update(updatedUser)
+        .eq("email", email)
+        .select();
+
+      if (error) {
+        throw new Error(`Failed to update user: ${error.message}`);
+      }
+
+      return data[0];
+    }
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    // Validate parameters
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+
+    // Delete the user
+    const { error } = await supabase.from("users").delete().eq("id", userId);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
+
+    return true; // Return success
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
+
 export const findUserByEmail = async (email) => {
   try {
     // The issue is with using .single() when there might be no matching user
@@ -160,158 +352,158 @@ export const logoutUser = () => {
 };
 
 // Update user data
-export const updateUser = async (email, updatedData) => {
-  if (!supabaseEnabled) {
-    // Fallback to localStorage update
-    const users = getAllUsersLocal();
-    const userIndex = users.findIndex(
-      (user) => user.email.toLowerCase() === email.toLowerCase()
-    );
+// export const updateUser = async (email, updatedData) => {
+//   if (!supabaseEnabled) {
+//     // Fallback to localStorage update
+//     const users = getAllUsersLocal();
+//     const userIndex = users.findIndex(
+//       (user) => user.email.toLowerCase() === email.toLowerCase()
+//     );
 
-    if (userIndex === -1) {
-      return { success: false, message: "User not found" };
-    }
+//     if (userIndex === -1) {
+//       return { success: false, message: "User not found" };
+//     }
 
-    // Update user data
-    const updatedUser = { ...users[userIndex], ...updatedData };
-    users[userIndex] = updatedUser;
+//     // Update user data
+//     const updatedUser = { ...users[userIndex], ...updatedData };
+//     users[userIndex] = updatedUser;
 
-    // Update in localStorage
-    localStorage.setItem("users", JSON.stringify(users));
+//     // Update in localStorage
+//     localStorage.setItem("users", JSON.stringify(users));
 
-    // If this is the current user, update current user too
-    const currentUser = getCurrentUser();
-    if (
-      currentUser &&
-      currentUser.email.toLowerCase() === email.toLowerCase()
-    ) {
-      const { password: _, ...safeUser } = updatedUser;
-      localStorage.setItem("currentUser", JSON.stringify(safeUser));
-    }
+//     // If this is the current user, update current user too
+//     const currentUser = getCurrentUser();
+//     if (
+//       currentUser &&
+//       currentUser.email.toLowerCase() === email.toLowerCase()
+//     ) {
+//       const { password: _, ...safeUser } = updatedUser;
+//       localStorage.setItem("currentUser", JSON.stringify(safeUser));
+//     }
 
-    return { success: true, user: updatedUser };
-  }
+//     return { success: true, user: updatedUser };
+//   }
 
-  try {
-    // First, get the user to update
-    const user = await findUserByEmail(email);
+//   try {
+//     // First, get the user to update
+//     const user = await findUserByEmail(email);
 
-    if (!user) {
-      return { success: false, message: "User not found" };
-    }
+//     if (!user) {
+//       return { success: false, message: "User not found" };
+//     }
 
-    // Prepare update data in Supabase format
-    const supabaseUpdateData = {};
+//     // Prepare update data in Supabase format
+//     const supabaseUpdateData = {};
 
-    // Map fields to the correct format
-    if (updatedData.name) supabaseUpdateData.name = updatedData.name;
-    if (updatedData.avatar) supabaseUpdateData.avatar = updatedData.avatar;
-    if (updatedData.password)
-      supabaseUpdateData.password = updatedData.password;
-    if (updatedData.totalBalance !== undefined)
-      supabaseUpdateData.total_balance = updatedData.totalBalance;
-    if (updatedData.spendingByPeriod)
-      supabaseUpdateData.spending_by_period = updatedData.spendingByPeriod;
-    if (updatedData.categories)
-      supabaseUpdateData.categories = updatedData.categories;
+//     // Map fields to the correct format
+//     if (updatedData.name) supabaseUpdateData.name = updatedData.name;
+//     if (updatedData.avatar) supabaseUpdateData.avatar = updatedData.avatar;
+//     if (updatedData.password)
+//       supabaseUpdateData.password = updatedData.password;
+//     if (updatedData.total_balance !== undefined)
+//       supabaseUpdateData.total_balance = updatedData.totalBalance;
+//     if (updatedData.spending_by_period)
+//       supabaseUpdateData.spending_by_period = updatedData.spending_by_period;
+//     if (updatedData.categories)
+//       supabaseUpdateData.categories = updatedData.categories;
 
-    // Only update if there's data to update
-    if (Object.keys(supabaseUpdateData).length > 0) {
-      const { error } = await supabase
-        .from("users")
-        .update(supabaseUpdateData)
-        .eq("id", user.id);
+//     // Only update if there's data to update
+//     if (Object.keys(supabaseUpdateData).length > 0) {
+//       const { error } = await supabase
+//         .from("users")
+//         .update(supabaseUpdateData)
+//         .eq("id", user.id);
 
-      if (error) throw error;
-    }
+//       if (error) throw error;
+//     }
 
-    // Handle transactions update
-    if (updatedData.transactions) {
-      // Clear existing transactions and insert new ones
-      const { error: deleteError } = await supabase
-        .from("transactions")
-        .delete()
-        .eq("user_id", user.id);
+//     // Handle transactions update
+//     if (updatedData.transactions) {
+//       // Clear existing transactions and insert new ones
+//       const { error: deleteError } = await supabase
+//         .from("transactions")
+//         .delete()
+//         .eq("user_id", user.id);
 
-      if (deleteError) throw deleteError;
+//       if (deleteError) throw deleteError;
 
-      if (updatedData.transactions.length > 0) {
-        // Insert new transactions
-        const transactionsToInsert = updatedData.transactions.map((t) => ({
-          user_id: user.id,
-          amount: t.amount,
-          category: t.category,
-          description: t.description || "",
-          is_positive: t.isPositive,
-          date: t.date || new Date().toISOString().split("T")[0],
-        }));
+//       if (updatedData.transactions.length > 0) {
+//         // Insert new transactions
+//         const transactionsToInsert = updatedData.transactions.map((t) => ({
+//           user_id: user.id,
+//           amount: t.amount,
+//           category: t.category,
+//           description: t.description || "",
+//           is_positive: t.isPositive,
+//           date: t.date || new Date().toISOString().split("T")[0],
+//         }));
 
-        const { error: insertError } = await supabase
-          .from("transactions")
-          .insert(transactionsToInsert);
+//         const { error: insertError } = await supabase
+//           .from("transactions")
+//           .insert(transactionsToInsert);
 
-        if (insertError) throw insertError;
-      }
-    }
+//         if (insertError) throw insertError;
+//       }
+//     }
 
-    // Handle messages update
-    if (updatedData.messages) {
-      // Clear existing messages and insert new ones
-      const { error: deleteError } = await supabase
-        .from("messages")
-        .delete()
-        .eq("user_id", user.id);
+//     // Handle messages update
+//     if (updatedData.messages) {
+//       // Clear existing messages and insert new ones
+//       const { error: deleteError } = await supabase
+//         .from("messages")
+//         .delete()
+//         .eq("user_id", user.id);
 
-      if (deleteError) throw deleteError;
+//       if (deleteError) throw deleteError;
 
-      if (updatedData.messages.length > 0) {
-        // Insert new messages
-        const messagesToInsert = updatedData.messages.map((m) => ({
-          user_id: user.id,
-          content: m.content,
-          time:
-            m.time ||
-            new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          sender: m.sender,
-          is_read: m.isRead || false,
-        }));
+//       if (updatedData.messages.length > 0) {
+//         // Insert new messages
+//         const messagesToInsert = updatedData.messages.map((m) => ({
+//           user_id: user.id,
+//           content: m.content,
+//           time:
+//             m.time ||
+//             new Date().toLocaleTimeString([], {
+//               hour: "2-digit",
+//               minute: "2-digit",
+//             }),
+//           sender: m.sender,
+//           is_read: m.isRead || false,
+//         }));
 
-        const { error: insertError } = await supabase
-          .from("messages")
-          .insert(messagesToInsert);
+//         const { error: insertError } = await supabase
+//           .from("messages")
+//           .insert(messagesToInsert);
 
-        if (insertError) throw insertError;
-      }
-    }
+//         if (insertError) throw insertError;
+//       }
+//     }
 
-    // Get the updated user
-    const updatedUser = await findUserByEmail(email);
+//     // Get the updated user
+//     const updatedUser = await findUserByEmail(email);
 
-    // If this is the current user, update current user in localStorage
-    const currentUser = getCurrentUser();
-    if (
-      currentUser &&
-      currentUser.email.toLowerCase() === email.toLowerCase()
-    ) {
-      const { password: _, ...safeUser } = updatedUser;
-      localStorage.setItem("currentUser", JSON.stringify(safeUser));
-    }
+//     // If this is the current user, update current user in localStorage
+//     const currentUser = getCurrentUser();
+//     if (
+//       currentUser &&
+//       currentUser.email.toLowerCase() === email.toLowerCase()
+//     ) {
+//       const { password: _, ...safeUser } = updatedUser;
+//       localStorage.setItem("currentUser", JSON.stringify(safeUser));
+//     }
 
-    return { success: true, user: updatedUser };
-  } catch (error) {
-    console.error("Error updating user in Supabase:", error);
+//     return { success: true, user: updatedUser };
+//   } catch (error) {
+//     console.error("Error updating user in Supabase:", error);
 
-    if (!supabaseEnabled) {
-      // If Supabase failed and we have localStorage as fallback
-      return updateUser(email, updatedData);
-    }
+//     if (!supabaseEnabled) {
+//       // If Supabase failed and we have localStorage as fallback
+//       return updateUser(email, updatedData);
+//     }
 
-    return { success: false, message: "Update error: " + error.message };
-  }
-};
+//     return { success: false, message: "Update error: " + error.message };
+//   }
+// };
 
 // Register new user
 export const registerUser = async (userData) => {
@@ -337,7 +529,7 @@ export const registerUser = async (userData) => {
           .join("") ||
         "NU",
       totalBalance: userData.totalBalance || 0,
-      spendingByPeriod: userData.spendingByPeriod || {
+      spending_by_period: userData.spending_by_period || {
         Day: 0,
         Week: 0,
         Month: 0,
@@ -385,8 +577,8 @@ export const registerUser = async (userData) => {
         password: userData.password, // In prod, should be hashed
         name: userData.name || "New User",
         avatar: avatar,
-        total_balance: userData.totalBalance || 0,
-        spending_by_period: userData.spendingByPeriod || {
+        total_balance: userData.total_balance || 0,
+        spending_by_period: userData.spending_by_period || {
           Day: 0,
           Week: 0,
           Month: 0,
@@ -733,7 +925,7 @@ export const recalculateBalance = async (email) => {
       }
     });
 
-    return updateUser(email, { totalBalance: balance });
+    return updateUser(email, { total_balance: balance });
   } catch (error) {
     console.error("Error recalculating balance:", error);
     return {
@@ -744,7 +936,7 @@ export const recalculateBalance = async (email) => {
 };
 
 // Calculate spending analytics for different periods
-export const calculateSpendingByPeriod = async (email) => {
+export const calculatespending_by_period = async (email) => {
   try {
     const user = await findUserByEmail(email);
 
@@ -768,7 +960,7 @@ export const calculateSpendingByPeriod = async (email) => {
     ).getTime();
     const startOfYear = new Date(now.getFullYear(), 0, 1).getTime();
 
-    let spendingByPeriod = {
+    let spending_by_period = {
       Day: 0,
       Week: 0,
       Month: 0,
@@ -782,24 +974,24 @@ export const calculateSpendingByPeriod = async (email) => {
         const amount = parseFloat(transaction.amount);
 
         if (transactionDate >= today) {
-          spendingByPeriod.Day += amount;
+          spending_by_period.Day += amount;
         }
 
         if (transactionDate >= startOfWeek) {
-          spendingByPeriod.Week += amount;
+          spending_by_period.Week += amount;
         }
 
         if (transactionDate >= startOfMonth) {
-          spendingByPeriod.Month += amount;
+          spending_by_period.Month += amount;
         }
 
         if (transactionDate >= startOfYear) {
-          spendingByPeriod.Year += amount;
+          spending_by_period.Year += amount;
         }
       }
     });
 
-    return updateUser(email, { spendingByPeriod });
+    return updateUser(email, { spending_by_period });
   } catch (error) {
     console.error("Error calculating spending by period:", error);
     return {
@@ -926,8 +1118,8 @@ export const importUserData = async (email, jsonData) => {
     const validFields = [
       "name",
       "avatar",
-      "totalBalance",
-      "spendingByPeriod",
+      "total_balance",
+      "spending_by_period",
       "categories",
       "transactions",
       "messages",
@@ -951,77 +1143,77 @@ export const importUserData = async (email, jsonData) => {
   }
 };
 
-// Delete user account
-export const deleteUser = async (email) => {
-  try {
-    const user = await findUserByEmail(email);
+// // Delete user account
+// export const deleteUser = async (email) => {
+//   try {
+//     const user = await findUserByEmail(email);
 
-    if (!user) {
-      return { success: false, message: "User not found" };
-    }
+//     if (!user) {
+//       return { success: false, message: "User not found" };
+//     }
 
-    if (!supabaseEnabled) {
-      // Fallback to localStorage approach
-      const users = getAllUsersLocal();
-      const filteredUsers = users.filter(
-        (u) => u.email.toLowerCase() !== email.toLowerCase()
-      );
+//     if (!supabaseEnabled) {
+//       // Fallback to localStorage approach
+//       const users = getAllUsersLocal();
+//       const filteredUsers = users.filter(
+//         (u) => u.email.toLowerCase() !== email.toLowerCase()
+//       );
 
-      localStorage.setItem("users", JSON.stringify(filteredUsers));
+//       localStorage.setItem("users", JSON.stringify(filteredUsers));
 
-      // If this was the current user, log them out
-      const currentUser = getCurrentUser();
-      if (
-        currentUser &&
-        currentUser.email.toLowerCase() === email.toLowerCase()
-      ) {
-        logoutUser();
-      }
+//       // If this was the current user, log them out
+//       const currentUser = getCurrentUser();
+//       if (
+//         currentUser &&
+//         currentUser.email.toLowerCase() === email.toLowerCase()
+//       ) {
+//         logoutUser();
+//       }
 
-      return { success: true, message: "User account deleted successfully" };
-    }
+//       return { success: true, message: "User account deleted successfully" };
+//     }
 
-    // For Supabase, we need to delete all related data first
+//     // For Supabase, we need to delete all related data first
 
-    // Delete user transactions
-    const { error: txError } = await supabase
-      .from("transactions")
-      .delete()
-      .eq("user_id", user.id);
+//     // Delete user transactions
+//     const { error: txError } = await supabase
+//       .from("transactions")
+//       .delete()
+//       .eq("user_id", user.id);
 
-    if (txError) throw txError;
+//     if (txError) throw txError;
 
-    // Delete user messages
-    const { error: msgError } = await supabase
-      .from("messages")
-      .delete()
-      .eq("user_id", user.id);
+//     // Delete user messages
+//     const { error: msgError } = await supabase
+//       .from("messages")
+//       .delete()
+//       .eq("user_id", user.id);
 
-    if (msgError) throw msgError;
+//     if (msgError) throw msgError;
 
-    // Finally delete the user
-    const { error } = await supabase.from("users").delete().eq("id", user.id);
+//     // Finally delete the user
+//     const { error } = await supabase.from("users").delete().eq("id", user.id);
 
-    if (error) throw error;
+//     if (error) throw error;
 
-    // If this was the current user, log them out
-    const currentUser = getCurrentUser();
-    if (
-      currentUser &&
-      currentUser.email.toLowerCase() === email.toLowerCase()
-    ) {
-      logoutUser();
-    }
+//     // If this was the current user, log them out
+//     const currentUser = getCurrentUser();
+//     if (
+//       currentUser &&
+//       currentUser.email.toLowerCase() === email.toLowerCase()
+//     ) {
+//       logoutUser();
+//     }
 
-    return { success: true, message: "User account deleted successfully" };
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    return {
-      success: false,
-      message: "Failed to delete account: " + error.message,
-    };
-  }
-};
+//     return { success: true, message: "User account deleted successfully" };
+//   } catch (error) {
+//     console.error("Error deleting user:", error);
+//     return {
+//       success: false,
+//       message: "Failed to delete account: " + error.message,
+//     };
+//   }
+// };
 
 // Check database status (Supabase or localStorage)
 export const getDatabaseStatus = async () => {
