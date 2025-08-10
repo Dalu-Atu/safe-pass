@@ -1,12 +1,60 @@
-# React + Vite
+<!-- Banner (upload a nice banner to ./assets/banner.png) -->
+<p align="center">
+  <img src="./assets/banner.png" alt="Crypto & Banking Simulation — Daniel Atu" width="100%" style="max-width:1100px; border-radius:12px;" />
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🏦 Crypto & Banking Simulation - Safe-Pass
+**Fun · Educational · Local-only**  
+A realistic-looking banking & crypto wallet simulation that mimics deposits, withdrawals, transfers, and support requests — **no real money involved**.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+<p align="center">
+  <a href="#features">Features</a> ·
+  <a href="#demo">Demo</a> ·
+  <a href="#tech-stack">Tech</a> ·
+  <a href="#setup">Setup</a> ·
+  <a href="#disclaimer">Disclaimer</a> ·
+  <a href="#contact">Contact</a>
+</p>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+## 🚀 Features
+- Simulated user balances, deposits, withdrawals, and peer-to-peer transfers  
+- Transaction history per user (local / demo data only)  
+- Support ticket flow (request-based, not realtime)  
+- Clean responsive UI to mimic a real fintech product  
+  local-only mode — safe for demos and interviews
+
+
+
+## 📷 Demo
+> Replace `./public/demo.gif` with your actual demo GIF.
+
+![App Demo](./public/demo.gif)
+
+
+
+## 🛠 Tech Stack
+React • Tailwind CSS • Node.js • Express (optional demo server) • Context API / Redux
+
+
+## 📦 Quick setup (developer)
+```bash
+# clone & install
+git clone https://github.com/Dalu-Atu/safe-pass.git
+cd safe-pass
+npm install
+
+# dev
+npm run dev
+
+# build
+npm run build
+Notes
+
+
+This project is intentionally local/demo-only. Do not connect production payment providers or real wallets.
+⚠️ Disclaimer
+This is a simulation. No real money, blockchain, or financial services are connected. All balances and transactions are fake and stored locally (or in a test DB) for demonstration and learning purposes only. Do not use this repository to handle real funds or real user data.
